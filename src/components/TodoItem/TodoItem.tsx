@@ -22,7 +22,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const deleteTodoFromServer = async () => {
     setLoadingIds(prev => [...prev, todo.id]);
     try {
-      await deleteTodo(todo.id);
+      const response = await deleteTodo(todo.id);
+
+      if (response === 0) {
+        throw new Error('Invalid response from server');
+      }
 
       setTodos(prev => prev.filter(t => t.id !== todo.id));
     } catch (err) {
@@ -67,12 +71,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     setLoadingIds(prev => [...prev, todo.id]);
     try {
-      if (trimmed.length === 0) {
-        inputRef.current?.focus();
-        await deleteTodoFromServer();
+      // if (trimmed.length === 0) {
+      //   inputRef.current?.focus();
+      //   await deleteTodoFromServer();
 
-        return;
-      }
+      //   return;
+      // }
 
       await toggleTodo(todo.id, { title: trimmed });
 

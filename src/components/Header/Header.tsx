@@ -42,7 +42,7 @@ export const Header: React.FC<Props> = ({ setTempTodo }) => {
       setTempTodo({ ...data, id: 0 });
       setDisabled(true);
       const created = await addTodo(data);
-
+      console.log(created)
       if (!created || !created.id) {
         throw new Error('Invalid response from server');
       }
