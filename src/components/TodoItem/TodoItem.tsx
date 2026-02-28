@@ -61,22 +61,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const editTodo = async () => {
-    if (title === todo.title) {
+    const trimmed = title.trim();
+
+    if (trimmed === todo.title) {
       setIsEditing(false);
 
       return;
     }
 
-    const trimmed = title.trim();
-
     setLoadingIds(prev => [...prev, todo.id]);
     try {
-      // if (trimmed.length === 0) {
-      //   inputRef.current?.focus();
-      //   await deleteTodoFromServer();
+      if (trimmed.length === 0) {
+        inputRef.current?.focus();
+        await deleteTodoFromServer();
 
-      //   return;
-      // }
+        return;
+      }
 
       await toggleTodo(todo.id, { title: trimmed });
 
@@ -143,7 +143,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={() => setIsEditing(true)}
           >
-            {title}
+            {todo.title}
           </span>
           <button
             type="button"

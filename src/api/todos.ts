@@ -12,7 +12,7 @@ export const addTodo = (data: Omit<Todo, 'id'>) => {
 };
 
 export const deleteTodo = (id: number) => {
-  return client.delete(`/todos/${id}?userId=${USER_ID}`);
+  return client.delete(`/todos/${id}`);
 };
 
 export const toggleTodo = (id: number, data: Partial<Todo>) => {

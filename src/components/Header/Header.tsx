@@ -42,7 +42,7 @@ export const Header: React.FC<Props> = ({ setTempTodo }) => {
       setTempTodo({ ...data, id: 0 });
       setDisabled(true);
       const created = await addTodo(data);
-      console.log(created)
+
       if (!created || !created.id) {
         throw new Error('Invalid response from server');
       }
@@ -65,12 +65,12 @@ export const Header: React.FC<Props> = ({ setTempTodo }) => {
     setLoadingIds(idsToToggle);
 
     const results = await Promise.allSettled(
-      todos.map(item => toggleTodo(item.id, { completed: !todosAreToggle })),
+      idsToToggle.map(item => toggleTodo(item, { completed: !todosAreToggle })),
     );
 
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
-        const todoId = todos[index].id;
+        const todoId = idsToToggle[index];
 
         setTodos(prev =>
           prev.map(item =>

@@ -21,6 +21,35 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
   const active = todos.filter(todo => !todo.completed);
   const activeCount = active.length;
 
+  // const deleteAllCompleted = async () => {
+  //   const completedTodos = todos.filter(todo => todo.completed);
+
+  //   if (!completedTodos.length) {
+  //     return;
+  //   }
+
+  //   const idsToDelete = completedTodos.map(todo => todo.id);
+
+  //   setLoadingIds(idsToDelete);
+
+  //   try {
+  //     const response = await Promise.all(
+  //       idsToDelete.map(id => deleteTodo(id)),
+  //     );
+
+  //     if (response.includes(0)) {
+  //       showError('Unable to delete todo');
+  //       throw new Error('Invalid response from server');
+  //     }
+
+  //     setTodos(prev => prev.filter(todo => !idsToDelete.some(result => result === todo.id)));
+  //   } catch (err) {
+  //     showError('Unable to delete todo');
+  //   }
+
+  //   setLoadingIds([]);
+  // }
+
   const deleteAllCompleted = async () => {
     const completedTodos = todos.filter(todo => todo.completed);
 
@@ -36,28 +65,15 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
       idsToDelete.map(id => deleteTodo(id)),
     );
 
-    const successfulIds: number[] = [];
-    let hasError = false;
-
     results.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
-        if (result.value === 1) {
-          successfulIds.push(idsToDelete[index]);
-        } else {
-          hasError = true;
-        }
+      if (result.status === 'fulfilled' && result.value === 1) {
+        const todoId = idsToDelete[index];
+
+        setTodos(prev => prev.filter(todo => todo.id !== todoId));
       } else {
-        hasError = true;
+        showError('Unable to delete a todo');
       }
     });
-
-    if (successfulIds.length) {
-      setTodos(prev => prev.filter(todo => !successfulIds.includes(todo.id)));
-    }
-
-    if (hasError) {
-      showError('Unable to delete todos');
-    }
 
     setLoadingIds([]);
   };
