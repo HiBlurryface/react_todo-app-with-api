@@ -14,14 +14,13 @@ import { Footer } from './components/Footer/Footer';
 import { TodoContext } from './store/TodoContext';
 import { ErrorContext } from './store/ErrorContext';
 
-import { useError } from './hooks/useError';
 import { getTodos, USER_ID } from './api/todos';
 import { UserWarning } from './UserWarning';
+import { useContext } from 'react';
 
 export const App: React.FC = () => {
-  const { error, showError, closeError } = useError();
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadingIds, setLoadingIds] = useState<number[]>([]);
+  const { isError, errorMessage, showError, closeError } = useContext(ErrorContext);
+  const { todos, setTodos } = useContext(TodoContext)
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Filter>('All');
 
@@ -64,18 +63,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoContext.Provider
-          value={{ todos, setTodos, loadingIds, setLoadingIds }}
-        >
-          <ErrorContext.Provider value={{ ...error, showError, closeError }}>
-            <Header setTempTodo={setTempTodo} />
-            <TodoList todos={filteredTodos} />
-            {tempTodo !== null && <TodoItem todo={tempTodo} />}
-            {todos.length > 0 && (
-              <Footer filter={filter} setFilter={setFilter} />
-            )}
-          </ErrorContext.Provider>
-        </TodoContext.Provider>
+        <Header setTempTodo={setTempTodo} />
+        <TodoList todos={filteredTodos} />
+        {tempTodo !== null && <TodoItem todo={tempTodo} />}
+        {todos.length > 0 && (
+          <Footer filter={filter} setFilter={setFilter} />
+        )}
       </div>
 
       <div
@@ -83,7 +76,7 @@ export const App: React.FC = () => {
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
           {
-            hidden: !error.isError,
+            hidden: !isError,
           },
         )}
       >
@@ -93,7 +86,7 @@ export const App: React.FC = () => {
           className="delete"
           onClick={closeError}
         />
-        {error.errorMessage}
+        {errorMessage}
       </div>
     </div>
   );

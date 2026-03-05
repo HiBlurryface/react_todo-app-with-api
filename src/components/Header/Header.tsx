@@ -7,6 +7,7 @@ import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../store/TodoContext';
 import { ErrorContext } from '../../store/ErrorContext';
 import classNames from 'classnames';
+import { LoadingContext } from '../../store/LoadingContext';
 
 type Props = {
   setTempTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
@@ -14,7 +15,8 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ setTempTodo }) => {
   const { showError } = useContext(ErrorContext);
-  const { todos, setTodos, setLoadingIds } = useContext(TodoContext);
+  const { setLoadingIds } = useContext(LoadingContext)
+  const { todos, setTodos } = useContext(TodoContext);
   const [newTodo, setNewTodo] = useState<string>('');
   const [disabled, setDisabled] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);

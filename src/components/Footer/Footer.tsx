@@ -5,6 +5,7 @@ import { Filter } from '../../types/Filters';
 import { TodoContext } from '../../store/TodoContext';
 import { ErrorContext } from '../../store/ErrorContext';
 import { deleteTodo } from '../../api/todos';
+import { LoadingContext } from '../../store/LoadingContext';
 
 type Props = {
   filter: Filter;
@@ -12,7 +13,8 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
-  const { todos, setTodos, setLoadingIds } = useContext(TodoContext);
+  const { todos, setTodos } = useContext(TodoContext);
+  const { setLoadingIds } = useContext(LoadingContext);
   const { showError } = useContext(ErrorContext);
 
   const filters: Filter[] = ['All', 'Active', 'Completed'];

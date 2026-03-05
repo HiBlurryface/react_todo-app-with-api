@@ -4,14 +4,17 @@ import { deleteTodo, patchTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../store/TodoContext';
 import { ErrorContext } from '../../store/ErrorContext';
+import { LoadingContext } from '../../store/LoadingContext';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { setTodos, loadingIds, setLoadingIds } = useContext(TodoContext);
+  const { setTodos } = useContext(TodoContext);
+  const { loadingIds, setLoadingIds } = useContext(LoadingContext);
   const { showError } = useContext(ErrorContext);
+
   const [title, setTitle] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
