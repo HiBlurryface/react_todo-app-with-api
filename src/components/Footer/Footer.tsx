@@ -16,39 +16,8 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
   const { showError } = useContext(ErrorContext);
 
   const filters: Filter[] = ['All', 'Active', 'Completed'];
-  const completed = todos.filter(todo => todo.completed);
-  const completedCount = completed.length;
-  const active = todos.filter(todo => !todo.completed);
-  const activeCount = active.length;
-
-  // const deleteAllCompleted = async () => {
-  //   const completedTodos = todos.filter(todo => todo.completed);
-
-  //   if (!completedTodos.length) {
-  //     return;
-  //   }
-
-  //   const idsToDelete = completedTodos.map(todo => todo.id);
-
-  //   setLoadingIds(idsToDelete);
-
-  //   try {
-  //     const response = await Promise.all(
-  //       idsToDelete.map(id => deleteTodo(id)),
-  //     );
-
-  //     if (response.includes(0)) {
-  //       showError('Unable to delete todo');
-  //       throw new Error('Invalid response from server');
-  //     }
-
-  //     setTodos(prev => prev.filter(todo => !idsToDelete.some(result => result === todo.id)));
-  //   } catch (err) {
-  //     showError('Unable to delete todo');
-  //   }
-
-  //   setLoadingIds([]);
-  // }
+  const completedCount = todos.filter(todo => todo.completed).length;
+  const activeCount = todos.filter(todo => !todo.completed).length;
 
   const deleteAllCompleted = async () => {
     const completedTodos = todos.filter(todo => todo.completed);
@@ -65,15 +34,10 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
       idsToDelete.map(id => deleteTodo(id)),
     );
 
-    results.forEach((result, index) => {
-      if (result.status === 'fulfilled' && result.value === 1) {
-        const todoId = idsToDelete[index];
-
-        setTodos(prev => prev.filter(todo => todo.id !== todoId));
-      } else {
-        showError('Unable to delete a todo');
-      }
-    });
+    const deletedIds = results
+      .map((r, i) => (r.status === "fulfilled" && r.value === 1 ? idsToDelete[i] : showError('Unable to delete a todo')))
+      .filter(Boolean);
+    setTodos((prev) => prev.filter((t) => !deletedIds.includes(t.id)));
 
     setLoadingIds([]);
   };
