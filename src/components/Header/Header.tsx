@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { useState } from 'react';
-import { addTodo, toggleTodo, USER_ID } from '../../api/todos';
+import { addTodo, patchTodo, USER_ID } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../store/TodoContext';
 import { ErrorContext } from '../../store/ErrorContext';
@@ -65,7 +65,7 @@ export const Header: React.FC<Props> = ({ setTempTodo }) => {
     setLoadingIds(idsToToggle);
 
     const results = await Promise.allSettled(
-      idsToToggle.map(item => toggleTodo(item, { completed: !todosAreToggle })),
+      idsToToggle.map(item => patchTodo(item, { completed: !todosAreToggle })),
     );
 
     results.forEach((result, index) => {

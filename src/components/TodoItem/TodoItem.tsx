@@ -1,12 +1,9 @@
 import classNames from 'classnames';
-import { useContext } from 'react';
-import { deleteTodo, toggleTodo } from '../../api/todos';
+import { useContext, useState, useRef, useEffect } from 'react';
+import { deleteTodo, patchTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../store/TodoContext';
 import { ErrorContext } from '../../store/ErrorContext';
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useEffect } from 'react';
 
 type Props = {
   todo: Todo;
@@ -19,8 +16,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const deleteTodoFromServer = async () => {
-    setLoadingIds(prev => [...prev, todo.id]);
+  const deleteTodoFromServer = async (skipLoading = false) => {
+    if (!skipLoading) {
+      setLoadingIds(prev => [...prev, todo.id]);
+    }
+
     try {
       const response = await deleteTodo(todo.id);
 
@@ -32,14 +32,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     } catch (err) {
       showError('Unable to delete a todo');
     } finally {
-      setLoadingIds(prev => prev.filter(i => i !== todo.id));
+      if (!skipLoading) {
+        setLoadingIds(prev => [...prev, todo.id]);
+      }
     }
   };
 
   const todoCompleteButton = async () => {
     setLoadingIds(prev => [...prev, todo.id]);
     try {
-      await toggleTodo(todo.id, { completed: !todo.completed });
+      await patchTodo(todo.id, { completed: !todo.completed });
 
       setTodos(prev =>
         prev.map(item =>
@@ -73,12 +75,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     try {
       if (trimmed.length === 0) {
         inputRef.current?.focus();
-        await deleteTodoFromServer();
+        await deleteTodoFromServer(true);
 
         return;
       }
 
-      await toggleTodo(todo.id, { title: trimmed });
+      await patchTodo(todo.id, { title: trimmed });
 
       setTodos(prev =>
         prev.map(item =>
@@ -119,7 +121,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
-          onClick={todoCompleteButton}
+          onChange={todoCompleteButton}
         />
       </label>
       {isEditing ? (
@@ -149,7 +151,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={deleteTodoFromServer}
+            onClick={() => deleteTodoFromServer(false)}
           >
             ×
           </button>
