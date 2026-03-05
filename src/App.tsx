@@ -44,20 +44,14 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = () => {
-    let copyTodos = [...todos];
-
     switch (filter) {
       case 'Active':
-        copyTodos = copyTodos.filter(item => !item.completed);
-        break;
+        return todos.filter(item => !item.completed);
       case 'Completed':
-        copyTodos = copyTodos.filter(item => item.completed);
-        break;
+        return todos.filter(item => item.completed);
       default:
-        break;
+        return todos;
     }
-
-    return copyTodos;
   };
 
   if (!USER_ID) {
