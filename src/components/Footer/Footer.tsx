@@ -35,9 +35,14 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
     );
 
     const deletedIds = results
-      .map((r, i) => (r.status === "fulfilled" && r.value === 1 ? idsToDelete[i] : showError('Unable to delete a todo')))
+      .map((r, i) =>
+        r.status === 'fulfilled' && r.value === 1
+          ? idsToDelete[i]
+          : showError('Unable to delete a todo'),
+      )
       .filter(Boolean);
-    setTodos((prev) => prev.filter((t) => !deletedIds.includes(t.id)));
+
+    setTodos(prev => prev.filter(t => !deletedIds.includes(t.id)));
 
     setLoadingIds([]);
   };
