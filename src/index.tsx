@@ -16,5 +16,5 @@ createRoot(document.getElementById('root') as HTMLDivElement).render(
         <App />
       </ErrorProvider>
     </LoadingProvider>
-  </TodoProvider>
+  </TodoProvider>,
 );

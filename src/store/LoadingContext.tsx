@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { createContext } from "react";
+import { useState, useMemo } from 'react';
+import { createContext } from 'react';
 
 interface LoadingProps {
   loadingIds: number[];
@@ -8,20 +8,25 @@ interface LoadingProps {
 
 export const LoadingContext = createContext<LoadingProps>({
   loadingIds: [],
-  setLoadingIds: () => { },
-})
+  setLoadingIds: () => {},
+});
 
-export const LoadingProvider = ({ children }: { children: React.ReactNode }) => {
+export const LoadingProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
 
-  const value = useMemo(() => ({
-    loadingIds,
-    setLoadingIds,
-  }), [loadingIds]);
+  const value = useMemo(
+    () => ({
+      loadingIds,
+      setLoadingIds,
+    }),
+    [loadingIds],
+  );
 
   return (
-    <LoadingContext.Provider value={value}>
-      {children}
-    </LoadingContext.Provider>
-  )
-}
+    <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>
+  );
+};

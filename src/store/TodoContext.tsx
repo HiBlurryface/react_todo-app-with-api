@@ -9,21 +9,19 @@ interface TodoProps {
 
 export const TodoContext = createContext<TodoProps>({
   todos: [],
-  setTodos: () => { }
+  setTodos: () => {},
 });
-
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const value = useMemo(() => ({
-    todos,
-    setTodos,
-  }), [todos]);
+  const value = useMemo(
+    () => ({
+      todos,
+      setTodos,
+    }),
+    [todos],
+  );
 
-  return (
-    <TodoContext.Provider value={value}>
-      {children}
-    </TodoContext.Provider>
-  )
-}
+  return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
+};

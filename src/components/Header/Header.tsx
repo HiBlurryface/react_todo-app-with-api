@@ -15,7 +15,7 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ setTempTodo }) => {
   const { showError } = useContext(ErrorContext);
-  const { setLoadingIds } = useContext(LoadingContext)
+  const { setLoadingIds } = useContext(LoadingContext);
   const { todos, setTodos } = useContext(TodoContext);
   const [newTodo, setNewTodo] = useState<string>('');
   const [disabled, setDisabled] = useState<boolean>(false);

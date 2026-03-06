@@ -10,22 +10,23 @@ export interface ErrorContextProps extends ErrorState {
 export const ErrorContext = createContext<ErrorContextProps>({
   isError: false,
   errorMessage: '',
-  showError: () => { },
-  closeError: () => { },
+  showError: () => {},
+  closeError: () => {},
 });
 
 export const ErrorProvider = ({ children }: { children: React.ReactNode }) => {
   const { error, showError, closeError } = useError();
 
-  const value = useMemo(() => ({
-    ...error,
-    showError,
-    closeError,
-  }), [error, showError, closeError]);
+  const value = useMemo(
+    () => ({
+      ...error,
+      showError,
+      closeError,
+    }),
+    [error, showError, closeError],
+  );
 
   return (
-    <ErrorContext.Provider value={value}>
-      {children}
-    </ErrorContext.Provider>
-  )
-}
+    <ErrorContext.Provider value={value}>{children}</ErrorContext.Provider>
+  );
+};

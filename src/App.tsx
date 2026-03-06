@@ -19,8 +19,9 @@ import { UserWarning } from './UserWarning';
 import { useContext } from 'react';
 
 export const App: React.FC = () => {
-  const { isError, errorMessage, showError, closeError } = useContext(ErrorContext);
-  const { todos, setTodos } = useContext(TodoContext)
+  const { isError, errorMessage, showError, closeError } =
+    useContext(ErrorContext);
+  const { todos, setTodos } = useContext(TodoContext);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Filter>('All');
 
@@ -66,9 +67,7 @@ export const App: React.FC = () => {
         <Header setTempTodo={setTempTodo} />
         <TodoList todos={filteredTodos} />
         {tempTodo !== null && <TodoItem todo={tempTodo} />}
-        {todos.length > 0 && (
-          <Footer filter={filter} setFilter={setFilter} />
-        )}
+        {todos.length > 0 && <Footer filter={filter} setFilter={setFilter} />}
       </div>
 
       <div
