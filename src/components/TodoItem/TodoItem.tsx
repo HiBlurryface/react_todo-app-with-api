@@ -36,7 +36,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       showError('Unable to delete a todo');
     } finally {
       if (!skipLoading) {
-        setLoadingIds(prev => [...prev, todo.id]);
+        setLoadingIds(prev => prev.filter(i => i !== todo.id));
       }
     }
   };

@@ -18,8 +18,8 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
   const { showError } = useContext(ErrorContext);
 
   const filters: Filter[] = ['All', 'Active', 'Completed'];
-  const completedCount = todos.filter(todo => todo.completed).length;
-  const activeCount = todos.filter(todo => !todo.completed).length;
+  const activeCount = todos.filter(t => !t.completed).length;
+  const completedCount = todos.length - activeCount;
 
   const deleteAllCompleted = async () => {
     const completedTodos = todos.filter(todo => todo.completed);
